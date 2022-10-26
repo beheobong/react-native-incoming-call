@@ -4,6 +4,7 @@ import android.app.KeyguardManager;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
@@ -160,9 +161,9 @@ public class UnlockScreenActivity extends AppCompatActivity implements UnlockScr
     }
 
     public void dismissIncoming() {
-        v.cancel();
-        player.stop();
-        player.prepareAsync();
+        vibrator.cancel();
+        ringtone.stop();
+//        player.prepareAsync();
         dismissDialing();
     }
 
@@ -213,18 +214,20 @@ public class UnlockScreenActivity extends AppCompatActivity implements UnlockScr
         }
         KeyguardManager mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
-        if (mKeyguardManager.isDeviceLocked()) {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mKeyguardManager.requestDismissKeyguard(this, new KeyguardManager.KeyguardDismissCallback() {
-              @Override
-              public void onDismissSucceeded() {
-                super.onDismissSucceeded();
-              }
-            });
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+          if (mKeyguardManager.isDeviceLocked()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+              mKeyguardManager.requestDismissKeyguard(this, new KeyguardManager.KeyguardDismissCallback() {
+                @Override
+                public void onDismissSucceeded() {
+                  super.onDismissSucceeded();
+                }
+              });
+            }
           }
-        }
+      }
 
-        sendEvent("answerCall", params);
+      sendEvent("answerCall", params);
         finish();
     }
 
