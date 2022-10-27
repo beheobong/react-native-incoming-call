@@ -214,20 +214,18 @@ public class UnlockScreenActivity extends AppCompatActivity implements UnlockScr
         }
         KeyguardManager mKeyguardManager = (KeyguardManager) getSystemService(Context.KEYGUARD_SERVICE);
 
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-          if (mKeyguardManager.isDeviceLocked()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-              mKeyguardManager.requestDismissKeyguard(this, new KeyguardManager.KeyguardDismissCallback() {
-                @Override
-                public void onDismissSucceeded() {
-                  super.onDismissSucceeded();
-                }
-              });
-            }
+        if (mKeyguardManager.isDeviceLocked()) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mKeyguardManager.requestDismissKeyguard(this, new KeyguardManager.KeyguardDismissCallback() {
+              @Override
+              public void onDismissSucceeded() {
+                super.onDismissSucceeded();
+              }
+            });
           }
-      }
+        }
 
-      sendEvent("answerCall", params);
+        sendEvent("answerCall", params);
         finish();
     }
 
